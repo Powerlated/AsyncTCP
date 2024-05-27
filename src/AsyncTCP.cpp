@@ -76,7 +76,7 @@ typedef struct {
         };
 } lwip_event_packet_t;
 
-static xQueueHandle _async_queue;
+static QueueHandle_t _async_queue;
 static TaskHandle_t _async_service_task_handle = NULL;
 
 
@@ -706,12 +706,12 @@ bool AsyncClient::connect(IPAddress ip, uint16_t port){
 
 bool AsyncClient::connect(const char* host, uint16_t port){
     ip_addr_t addr;
-    
+
     if(!_start_async_task()){
       log_e("failed to start task");
       return false;
     }
-    
+
     err_t err = dns_gethostbyname(host, &addr, (dns_found_callback)&_tcp_dns_found, this);
     if(err == ERR_OK) {
         return connect(IPAddress(addr.u_addr.ip4.addr), port);
